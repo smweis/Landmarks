@@ -303,32 +303,4 @@ public class MapTestTask : ExperimentTask {
         return (Mathf.Sqrt(Mathf.Pow(Mathf.Abs(v1.x - v2.x), 2f) + Mathf.Pow(Mathf.Abs(v1.z - v2.z), 2f)));
     }
 
-
-    private Transform GetClosestTarget(Transform selected, Transform targets)
-    {
-        Transform tMin = null; // initialize a container for the winner's transform and make it null to start
-        float minDist = Mathf.Infinity; // initialize a container for the current winning distance and set it to infinity to start
-        Vector3 currentPos = selected.position; // get the position of the object we're comparing 
-        foreach (Transform child in targets)
-        {
-            Debug.Log(child.name);
-            float dist = vector2DDistance(child.position, currentPos); // get the distance between this child and the activeTarget we're comparing
-            if (dist < minDist) // if this is lower than the initial value of infinity or the current winner
-            {
-                tMin = child; // save this child's transform as the current winner
-                minDist = dist; // save the distance from the activeTarget to this child as the winning distance
-            }
-        }
-
-        Debug.Log(minDist);
-
-        if (minDist <= snapToTargetProximity)
-        {
-            return tMin; // only return if the winning distance is within our snapping threshold
-        }
-        else return selected;
-        
-    }
 }
-
-
