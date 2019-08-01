@@ -1,16 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Valve.VR.InteractionSystem;
 
 public class LM_vrSlider : MonoBehaviour
 {
     public GameObject handle; // the object you will be manipulating to adjust the slider
     public GameObject start; // one endpoint of the sliders linear motion
     public GameObject end; // the other endpoint of the sliders linear motion
+    public GameObject linearMapping; // the linear mapping object for SteamVR slider function
     [HideInInspector] public float minValue = 0; // This value is fixed at 0 as a base for calculations to work. Scale adjustments should be made at the output of 'value'
     public float maxValue = 3; // Max value, determines number of snaps and intervals thereof based on minValue
     public bool wholeNumbers = false;
-    public float value;
+    public float sliderValue;
 
     private float totalSliderRange;
     public float[] anchorPoints;
@@ -42,33 +44,30 @@ public class LM_vrSlider : MonoBehaviour
 
     private void Update()
     {
-        value = handle.GetComponent<RectTransform>().anchoredPosition.x / (totalSliderRange / maxValue);
-        if (wholeNumbers)
-        {
-            value = Mathf.RoundToInt(value);
-        }
+        sliderValue = handle.GetComponent<RectTransform>().anchoredPosition.x / (totalSliderRange / maxValue);
+        linearMapping.GetComponent<LinearMapping>().value = sliderValue/maxValue;
     }
-
-    public void GetSnap()
-{
-		SnapToPosition();
-}
 
 
     public void SnapToPosition()
     {
-        //Cycle through each predefined anchor point
-        for (int i = 0; i < anchorPoints.Length; i++)
+        if (wholeNumbers)
         {
-            //If lever is within "snapping distance" of that anchor point
-            if (Mathf.Abs(handle.GetComponent<RectTransform>().anchoredPosition.x - anchorPoints[i]) < ((totalSliderRange/maxValue)/2))
+            sliderValue = Mathf.RoundToInt(sliderValue);
+
+            //Cycle through each predefined anchor point
+            for (int i = 0; i < anchorPoints.Length; i++)
             {
-                //Get current lever position and update z pos to anchor point
-                Vector3 snapPosition = handle.GetComponent<RectTransform>().anchoredPosition;
-                snapPosition.x = anchorPoints[i];
-                handle.GetComponent<RectTransform>().anchoredPosition = snapPosition;
-                //Break so it stops checking other anchor points
-                break;
+                //If lever is within "snapping distance" of that anchor point
+                if (Mathf.Abs(handle.GetComponent<RectTransform>().anchoredPosition.x - anchorPoints[i]) < ((totalSliderRange / maxValue) / 2))
+                {
+                    //Get current lever position and update z pos to anchor point
+                    Vector3 snapPosition = handle.GetComponent<RectTransform>().anchoredPosition;
+                    snapPosition.x = anchorPoints[i];
+                    handle.GetComponent<RectTransform>().anchoredPosition = snapPosition;
+                    //Break so it stops checking other anchor points
+                    break;
+                }
             }
         }
     }

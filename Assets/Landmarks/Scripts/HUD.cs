@@ -18,6 +18,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using VRStandardAssets.Utils;
 
 public class HUD : MonoBehaviour 
 {
@@ -82,9 +83,10 @@ public class HUD : MonoBehaviour
     public void Awake()
 	{
 		SecondsToShow = GeneralDuration;
-		//Debug.Log ("Starting HUD.cs");
-		//canvasName = Canvas.name;
-		//Debug.Log ("Canvas Name: " + canvasName);
+        //Debug.Log ("Starting HUD.cs");
+        //canvasName = Canvas.name;
+        //Debug.Log ("Canvas Name: " + canvasName);
+        this.actionButton.GetComponent<Button>().onClick.AddListener(OnActionClick);
 	}
 	public void setMessage(string newMessage)
 	{
@@ -130,8 +132,30 @@ public class HUD : MonoBehaviour
 		cam[0].clearFlags = CameraClearFlags.SolidColor;
 		cam[1].clearFlags = CameraClearFlags.SolidColor;
 	}
-	
-	public void showEverything()
+
+    public void showOnlyTargets()
+    {
+        cam[0].cullingMask = 1 << LayerMask.NameToLayer("Targets") | 1 << hudLayer;
+        cam[1].cullingMask = 1 << LayerMask.NameToLayer("Targets") | 1 << hudLayer;
+        cam[0].cullingMask = cam[0].cullingMask + (1 << 0);
+        cam[1].cullingMask = cam[1].cullingMask + (1 << 0);
+
+        cam[0].clearFlags = CameraClearFlags.SolidColor;
+        cam[1].clearFlags = CameraClearFlags.SolidColor;
+    }
+
+    public void showNothing()
+    {
+        cam[0].cullingMask = (0 << 30);
+        cam[1].cullingMask = (0 << 30);
+        cam[0].cullingMask = cam[0].cullingMask + (0 << 30);
+        cam[1].cullingMask = cam[1].cullingMask + (0 << 30);
+
+        cam[0].clearFlags = CameraClearFlags.SolidColor;
+        cam[1].clearFlags = CameraClearFlags.SolidColor;
+    }
+
+    public void showEverything()
 	{
 	this.enabled = true;
 		cam[0].cullingMask = 0 << hudLayer;
@@ -249,7 +273,10 @@ public class HUD : MonoBehaviour
             // if we're using an external wall or screen for the hud (fixed position), turn it off as well.
             if (hudNonEssentials != null)
             {
-                hudNonEssentials.SetActive(false);
+                foreach (Transform child in hudNonEssentials.transform)
+                {
+                    child.gameObject.layer = LayerMask.NameToLayer("Default");
+                }
             }
         }
 		else
@@ -261,7 +288,10 @@ public class HUD : MonoBehaviour
             // if we're using an external wall or screen for the hud (fixed position), Make sure it's active.
             if (hudNonEssentials != null)
             {
-                hudNonEssentials.SetActive(true);
+                foreach (Transform child in hudNonEssentials.transform)
+                {
+                    child.gameObject.layer = LayerMask.NameToLayer("HUD only");
+                }
             }
         }
 
@@ -406,5 +436,6 @@ public class HUD : MonoBehaviour
     public void OnActionClick()
     {
         actionButtonClicked = true;
+
     }
 }
