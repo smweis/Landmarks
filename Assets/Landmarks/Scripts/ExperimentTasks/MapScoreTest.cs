@@ -27,7 +27,7 @@ public class MapScoreTest : ExperimentTask {
 			DestroyImmediate (gui.gameObject);
 	}
 
-	public override void startTask () 
+	public override void startTask ()
 	{
 		TASK_START();
 		Debug.Log ("Scoring the map test");
@@ -64,7 +64,7 @@ public class MapScoreTest : ExperimentTask {
 		List<GameObject> targets = new List<GameObject>();
 		foreach (Transform target in targetObjects.transform) {
 			targets.Add (target.gameObject);
-		} 
+		}
 
 		// Compare responses to answer key
 		int numberCorrect = 0;
@@ -72,7 +72,7 @@ public class MapScoreTest : ExperimentTask {
 			Debug.Log ("Checking score for the " + targets [itarget].name);
 
 			// check if the store is rotated correctly. If not, we don't even need to check distance error... it's wrong
-			float tempErrorAngleX = Mathf.DeltaAngle( copies [itarget].transform.localRotation.eulerAngles.x, targets [itarget].transform.localRotation.eulerAngles.x); 
+			float tempErrorAngleX = Mathf.DeltaAngle( copies [itarget].transform.localRotation.eulerAngles.x, targets [itarget].transform.localRotation.eulerAngles.x);
 			float tempErrorAngleY = Mathf.DeltaAngle( copies [itarget].transform.localRotation.eulerAngles.y, targets [itarget].transform.localRotation.eulerAngles.y); // note this seems to correspond to z rotation axis in inspector
 			float tempErrorAngleZ = Mathf.DeltaAngle( copies [itarget].transform.localRotation.eulerAngles.z, targets [itarget].transform.localRotation.eulerAngles.z);
 			float tempErrorDistance =  vector2DDistance (copies [itarget].transform.position, targets [itarget].transform.position);
@@ -93,7 +93,7 @@ public class MapScoreTest : ExperimentTask {
 				Debug.Log ("Correct! " + tempErrorDistance + " meters from the correct position.");
 			}
 		}
-			
+
 		// calculate a percentage to report
 		percentCorrect = ((float)numberCorrect/numberTargets)*100; // when dividing two integers, must cast one as float to avoid unity rounding unneccesarily
 		Debug.Log ("Map Score = " + percentCorrect + "%");
@@ -141,7 +141,7 @@ public class MapScoreTest : ExperimentTask {
 		sgo.transform.position = new Vector3(0,0,0);
 		gui = sgo.GetComponent<GUIText>();
 		gui.pixelOffset = new Vector2( 20, Screen.height - 20);
-		gui.text = message.text;	   			
+		gui.text = message.text;
 
 		if (blackout) hud.showOnlyHUD();
 
@@ -163,7 +163,7 @@ public class MapScoreTest : ExperimentTask {
 	{
 		if (!manager)
 			Start ();
-		
+
 		base.startTask ();
 	}
 
@@ -178,7 +178,7 @@ public class MapScoreTest : ExperimentTask {
 			return true;
 		}
 
-		// Handle Timeout 
+		// Handle Timeout
 		if ( interval > 0 && Experiment.Now() - task_start >= interval)  {
 			return true;
 		}
@@ -192,7 +192,7 @@ public class MapScoreTest : ExperimentTask {
 		// -----------------------------------------
 		// Handle Debug button behavior
 		// -----------------------------------------
-		if (killCurrent == true) 
+		if (killCurrent == true)
 		{
 			return KillCurrent ();
 		}
@@ -200,7 +200,7 @@ public class MapScoreTest : ExperimentTask {
 		// -----------------------------------------
 		// Handle action button behavior
 		// -----------------------------------------
-		if (hud.actionButtonClicked == true) 
+		if (hud.actionButtonClicked == true)
 		{
 			hud.actionButtonClicked = false;
 			return true;
@@ -240,7 +240,7 @@ public class MapScoreTest : ExperimentTask {
 		// -------------------------------
 
 		// Destroy the copies we created when initializing the map test task
-		foreach (Transform child in copyObjects.transform) 
+		foreach (Transform child in copyObjects.transform)
 		{
 			Destroy (child.gameObject);
 		}

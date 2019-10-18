@@ -14,19 +14,19 @@ public class MapTestTask : ExperimentTask {
 	private GameObject activeTarget; // This is the container we will use for whichever object is currently being clicked and dragged
 	private bool targetActive = false; // Are we currently manipulating a targetobject?
 	private Vector3 previousTargetPos; // save the position when a target was clicked so users can undo the current move
-	private Vector3 previousTargetRot; // save the rotation when a target was clicked so users can undo the current rotate 
-	// allow for user input to shift the store labels during the map task (to allow viewing store and text clearly); 
+	private Vector3 previousTargetRot; // save the rotation when a target was clicked so users can undo the current rotate
+	// allow for user input to shift the store labels during the map task (to allow viewing store and text clearly);
 	public Vector3 hudTextOffset; // Text will be centered over an object. This allows users to move that to a desireable distance in order to keep the object visible when the name is shown
 
 
-	public override void startTask () 
+	public override void startTask ()
 	{
-		TASK_START();	
-		avatarLog.navLog = false;	
-	}	
+		TASK_START();
+		avatarLog.navLog = false;
+	}
 
 
-	public override void TASK_START() 
+	public override void TASK_START()
 	{
 		if (!manager) Start();
 		base.startTask();
@@ -37,7 +37,7 @@ public class MapTestTask : ExperimentTask {
 		hud.ForceShowMessage();
 		// move hud off screen if we aren't hitting a target shop
 		hud.hudPanel.transform.position = new Vector3(99999,99999,99999);
-	
+
 		// make the cursor functional and visible
 		Cursor.lockState = CursorLockMode.None;
 		Cursor.visible = true;
@@ -56,13 +56,13 @@ public class MapTestTask : ExperimentTask {
 
         // MJS - Removing Target Highlights for ease of use (requires additional environment configuration)
   //      // Turn on the maptarget highlights (to show where stores should be located
-  //      if (highlightAssist == true) 
+  //      if (highlightAssist == true)
 		//{
 		//	mapTestHighlights.SetActive (true);
 		//}
 
 		// Remove environment topography so tall things don't get in the way of dragging objects
-		if (flattenMap) 
+		if (flattenMap)
 		{
 			// Flatten out environment buildings so stores are clearly visible
 			GameObject.FindWithTag ("Environment").transform.localScale = new Vector3 (1, 0.01F, 1);
@@ -78,7 +78,7 @@ public class MapTestTask : ExperimentTask {
 			//}
 		}
 
-	}	
+	}
 
 
 	public override bool updateTask ()
@@ -100,10 +100,10 @@ public class MapTestTask : ExperimentTask {
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 
 		// Register when our raycaster is hitting a gameobject...
-		if (Physics.Raycast (ray, out hit)) 
+		if (Physics.Raycast (ray, out hit))
 		{
 			// ... but only if that game object is one of our target stores ...
-			if (hit.transform.CompareTag ("Target")) 
+			if (hit.transform.CompareTag ("Target"))
 			{
 				hud.setMessage (hit.transform.name);
 				hud.hudPanel.SetActive (true);
@@ -126,14 +126,14 @@ public class MapTestTask : ExperimentTask {
 					previousTargetPos = activeTarget.transform.position;
 					previousTargetRot = activeTarget.transform.eulerAngles;
                 }
-			} 
-			// ... Otherwise, clear the message and hide the gui 
-			else 
+			}
+			// ... Otherwise, clear the message and hide the gui
+			else
 			{
 				HideStoreName ();
 			}
-		} 
-		else 
+		}
+		else
 		{
 			HideStoreName ();
 		}
@@ -157,7 +157,7 @@ public class MapTestTask : ExperimentTask {
                     , 1);
 
             // BEHAVIOR: left click released (e.g., drop the store where it is)
-            if (Input.GetMouseButtonUp (0)) {
+            if (Input.GetMouseButtonUp(0)){
                 // Get position/rotation of nearest target location (if snapping assist is turned on)
                 if (snapToTargetProximity > 0.0f)
                 {
@@ -165,7 +165,7 @@ public class MapTestTask : ExperimentTask {
 
                     Transform tMin = null; // initialize a container for the winner's transform and make it null to start
                     float minDist = Mathf.Infinity; // initialize a container for the current winning distance and set it to infinity to start
-                    Vector3 currentPos = activeTarget.transform.position; // get the position of the object we're comparing 
+                    Vector3 currentPos = activeTarget.transform.position; // get the position of the object we're comparing
                     foreach (Transform child in targetList.parentObject.transform)
                     {
                         float dist = vector2DDistance(child.position, currentPos); // get the distance between this child and the activeTarget we're comparing
@@ -184,13 +184,13 @@ public class MapTestTask : ExperimentTask {
                 }
 
                 targetActive = false;
-				activeTarget = null;
+                activeTarget = null;
 
-				
-			}
-			// BEHAVIOR: Undo current move
-			// INPUT NAME: Cancel
-			else if (Input.GetButtonDown("Cancel")) {
+
+            }
+            // BEHAVIOR: Undo current move
+            // INPUT NAME: Cancel
+            else if (Input.GetButtonDown("Cancel")) {
 				activeTarget.transform.position = previousTargetPos;
 				activeTarget.transform.eulerAngles = previousTargetRot;
 				targetActive = false;
@@ -209,7 +209,7 @@ public class MapTestTask : ExperimentTask {
 		// -----------------------------------------
 		// Handle debug button behavior (kill task)
 		// -----------------------------------------
-		if (killCurrent == true) 
+		if (killCurrent == true)
 		{
 			return KillCurrent ();
 		}
@@ -217,23 +217,23 @@ public class MapTestTask : ExperimentTask {
 		// -----------------------------------------
 		// Handle action button behavior
 		// -----------------------------------------
-		if (hud.actionButtonClicked == true) 
+		if (hud.actionButtonClicked == true)
 		{
 			hud.actionButtonClicked = false;
 			return true;
 		}
-			
+
 		return false;
 	}
-		
 
-	public override void endTask() 
+
+	public override void endTask()
 	{
 		TASK_END();
 	}
 
 
-	public override void TASK_END() 
+	public override void TASK_END()
 	{
 		base.endTask();
 
@@ -259,7 +259,7 @@ public class MapTestTask : ExperimentTask {
 		firstPersonCamera.enabled = true;
 		overheadCamera.enabled = false;
 
-		if (flattenMap) 
+		if (flattenMap)
 		{
 			// un-Flatten out environment buildings so stores are clearly visible
 			GameObject.FindWithTag ("Environment").transform.localScale = new Vector3 (1, 1, 1);
@@ -282,7 +282,7 @@ public class MapTestTask : ExperimentTask {
 
         // MJS - Removing Target Highlights for ease of use (requires additional environment configuration)
         //// Turn off the maptarget highlights (to show where stores should be located
-        //if (highlightAssist == true) 
+        //if (highlightAssist == true)
         //{
         //	mapTestHighlights.SetActive (false);
         //}
