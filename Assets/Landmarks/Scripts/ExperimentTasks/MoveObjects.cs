@@ -60,7 +60,7 @@ public class MoveObjects : ExperimentTask {
         // Destroy any objects that don't get moved (say if we're only randomly using 8 stores out of a possible selection of 16)
         if (destroyExtraSources)
         {
-            Debug.Log("Trimming ObjectList " + sources.name + " from " + sources.objects.Count + " to " + destinations.objects.Count);
+            // Debug.Log("Trimming ObjectList " + sources.name + " from " + sources.objects.Count + " to " + destinations.objects.Count);
             for (int i = 0; i < sources.objects.Count; i++)
             {
                 if (i > destinations.objects.Count - 1) // needs to be one less or it won't clip the first store on the copping block.
@@ -71,7 +71,7 @@ public class MoveObjects : ExperimentTask {
         }
 
         // If we are moving our target objects, list their info
-        if (sources.objects[1].CompareTag("Target"))
+        if (sources.objects[0].CompareTag("Target"))
         {
             log.log("TARGET INFORMATION ----------------------------------------", 1);
         }
@@ -120,7 +120,7 @@ public class MoveObjects : ExperimentTask {
 		}
 
         // Clearly mark the log file with the end of the target info so it's easy to find, visually
-        if (sources.objects[1].CompareTag("Target"))
+        if (sources.objects[0].CompareTag("Target"))
         {
             log.log("-----------------------------------------------------------/", 1);
         }
